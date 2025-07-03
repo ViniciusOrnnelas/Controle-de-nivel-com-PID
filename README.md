@@ -1,19 +1,38 @@
 # Controle-de-nivel-com-PID
-Elaboração de um modelo de controle PID executado com microcontrolador Arduino para a efetuação do controle de nível de recipientes, apresentando a implementação de métodos para a definição dos elementos que o compõem no âmbito matemático, bem como os conceitos teóricos no qual o projeto é fundamentado e os resultados obtidos por meio de teste
+Este projeto tem como objetivo o desenvolvimento de um sistema de controle de nível de água utilizando um controlador PID implementado em um microcontrolador Arduino.
+
+## Materiais e tecnologias utilizadas
+
+O projeto consiste em:
+- Um protótipo com dois reservatórios de água;
+- Sensor ultrassônico para medir o nível;
+- Bomba de água de 12V para transferência do líquido;
+- Arduino Uno;
+- Algoritmos de identificação de sistemas e sintonia de controladores implementados em Python;
+- Controle embarcado utilizando algoritmo PI.
+
 
 ## Metodologia
-ara a realização do projeto, um protótipo que reproduz o comportamento de um sistema de reserva de fluidos foi elaborado, com o fluido a ser nivelado sendo água e com dois recipientes de tamanhos variados e posicionados um acima do outro, o inferior tendo uma bomba de água 12V acoplada externamente para o deslocamento do líquido para o recipiente que se encontra na posição elevada.Além disso, possui um sensor ultrassônico para a medição do nível da água no recipiente e um Arduino, que é uma placa eletrônica de código-aberto criada para prototipagem. O protótipo pode ser visualizado na imagem abaixo:
+A metodologia completa está descrita no arquivo [`docs/metodologia.md`](docs/metodologia.md).
 
-![image](https://github.com/user-attachments/assets/03883d6f-50d3-444e-9fc4-180eee2084c1)
+## Arduino (PI Controller)
+
+O código fonte está em [`software/controle_pi.ino`](software/controle_pi.ino)
+
+![image](https://github.com/user-attachments/assets/a0443860-10f5-45b7-9861-b425bb4837dd)
 
 
-Nesse contexto, implementou-se um algoritmo em Python que utiliza técnicas de processamento de sinais e identificação de sistemas. Primeiramente, os dados brutos são coletados do sistema para passar por uma etapa de pré-processamento, onde serão convertidos para vetores numéricos e depois  interpolados linearmente para garantir a sua discretização do tempo uniforme. A identificação do sistema foi realizada através de aproximação por filtro Butterworth de 1ª e 2ª ordem,  que, conforme (Dorf; Svoboda, 2016) se trata de um filtro elétrico passa-baixa que possui uma resposta de frequência próxima à de um filtro ideal, sendo baseada no modelo matemático desenvolvido por Butterworth conhecido como aproximação maximamente plana (ou aproximação de Butterworth), definida por (Malvino; Bates, 2016) como uma aproximação que possui como característica uma atenuação zero na maior parte da banda de passagem. Essas características fizeram com que os coeficientes do filtro fossem utilizados pelo algorítimo  por meio da função \textit{control.TransferFunction}[6], para construir as funções de transferência.
-Segunda ordem:
-\begin{equation}
-\frac{0.02008s^2+0.04017s+0.02008}{s^2-1.561s+0.6414}
-\end{equation}
+## Resultados
+A combinação dos elementos de eletrônicos com o controlador PID e PI ser visualizado abaixo:
+Após a determinação do sistema, foi executado um outro algorítimo em Python que realizou a sintonia de Ziegler-Nichols para um controlador PID. A função findpeak da biblioteca SciPy
 
-Primeira ordem:
-\begin{equation}
-\frac{0.1367s+0.1367}{s-0.7265}
-\end{equation}
+| **Controlador** | **Kp** | **Ki** | **Kd** |
+| --------------- | ------ | ------ | ------ |
+| P               | 1.0000 | -      | -      |
+| PI              | 0.9000 | 0.9549 | -      |
+| PID             | 1.2000 | 2.1221 | 0.1690 |
+
+![image](https://github.com/user-attachments/assets/4af1ff48-f6a5-466e-ac34-3ba06b51b60e)
+![image](https://github.com/user-attachments/assets/72477efd-9ff6-4920-88d5-ff7ca7295643)
+
+
